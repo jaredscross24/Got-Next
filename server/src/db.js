@@ -1,10 +1,13 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const { Pool } = require('pg');
 
+const dbUrl = process.env.DATABASE_URL || '';
+console.log('DB URL host:', dbUrl ? dbUrl.replace(/:([^:@]+)@/, ':***@').split('@')[1] : 'NOT SET - using localhost fallback');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/got_next',
-  ssl: process.env.DATABASE_URL?.includes('railway.internal') ? false
-     : process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false }
+  connectionString: dbUrl || 'postgresql://postgres:password@localhost:5432/got_next',
+  ssl: dbUrl.includes('railway.internal') ? false
+     : dbUrl.includes('rlwy.net') ? { rejectUnauthorized: false }
      : false,
 });
 
