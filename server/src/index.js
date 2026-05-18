@@ -18,7 +18,7 @@ async function start() {
     await pool.query(sql);
     console.log('DB schema ready');
   } catch (err) {
-    console.error('Migration warning:', err.message);
+    console.error('Migration error:', err.message, err.code, err.detail);
   }
 
   const server = http.createServer(app);
